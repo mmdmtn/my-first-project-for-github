@@ -205,9 +205,6 @@ for d in range(0 , len(pswrd) - 1):
 if count_rep >= 3:
     score_rate_pswrd -= 10
 
-if count_rep < 3:
-    score_rate_pswrd += 10
-    
 #_________________incorrect login codes__________________#
 
 score_rate_inc_log = 0
@@ -217,3 +214,6 @@ inc_log = int(inc_log)
 score_rate_inc_log = score_inc_log(inc_log , score_rate_inc_log)
 
 info(u_n , pswrd , inc_log , age_acc , score_rate_pswrd , score_rate_inc_log)
+
+
+#hello python
