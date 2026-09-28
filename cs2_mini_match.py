@@ -8,6 +8,13 @@ player = {
         "money" : 800
 }
 
+enemy = {
+
+    "hp" : 100,
+    "armor" : 100
+
+}
+
 weapon_pri = {
         "ak" : 2700,
         "awp" : 4750,
@@ -18,8 +25,12 @@ weapon_pri = {
         "xm_1014" : 1750,
         "deagle" : 900,
         "usp_s" : 800,
-        "glock" : 800,
-        "armor" : 1800
+        "glock" : 800
+}
+
+prot_pri = {
+    "armor" : 2400,
+    "helmet" : 4000
 }
 
 weapon_dam = {
@@ -41,9 +52,12 @@ TEAM_2 = 0
 
 def buy_menu():
     print("=============Buy Menu=============")
-    for weapon, price in weapon_pri.items():
-        print("🔫 " + weapon + " : " + str(price) +"$ 💵")
-    print
+    for weapon, price , dam in zip(weapon_pri, weapon_pri.values() , weapon_dam.values() ) :
+        print("🔫 " + weapon + " : " + str(price) +"$ 💵\n💥damage:" + str(dam))
+    for item , pri in prot_pri.items():
+       print("🛡 " + item + " : " + str(pri) + "$")
+
+    print("==================================")
     print("👉💵your money: " + str(player["money"]) + "💵")
         
 def select_team(player):
@@ -64,6 +78,20 @@ def select_gun(sel_gun, weapon_pri):
             break
     return sel_gun
 
+def select_arm(sel_arm , prot_pri):
+    while True:
+        if sel_arm not in prot_pri:
+            print("your enter is invalid!")
+            sel_arm = input("❓Select a protection item: ")
+        else:
+            player["armor"] = sel_arm
+            break
+    return sel_arm
+
+def select_gun_dam(sel_gun):
+    dam = weapon_dam[sel_gun]
+    return dam
+
 def price_gun(player, weapon_pri, sel_gun):
     while True:
         if player["money"] < weapon_pri[sel_gun]:
@@ -75,6 +103,19 @@ def price_gun(player, weapon_pri, sel_gun):
             print("✅ "+ sel_gun + " has been selected!💥")
             break
     return sel_gun
+
+def price_arm(player , prot_pri , sel_arm):
+    while True:
+        if player["money"] < prot_pri[sel_arm]:
+            print("❌your money isn't enough❌")
+            sel_arm = input("Select a protection item: ").lower()
+            sel_arm = select_arm(sel_arm , prot_pri)
+        else:
+            player["money"] -= prot_pri[sel_arm]
+            print("✅ "+ sel_arm + " has been selected! 🛡🧥")
+            break
+    return sel_arm
+
 
 def won_round(player):
     print("+300$ for kill")
@@ -175,6 +216,9 @@ buy_menu()
 sel_gun = input("❓Select a gun for play : ").lower()
 sel_gun = select_gun(sel_gun, weapon_pri)
 sel_gun = price_gun(player, weapon_pri, sel_gun)
-player["gun_dam"] = weapon_dam[sel_gun]
+player["gun_dam"] = select_gun_dam(sel_gun)
+sel_arm = input("select a protection item: ").lower()
+sel_arm = select_arm(sel_arm , prot_pri)
+sel_arm = price_arm(player , sel_arm , prot_pri)
 
 start_round()
