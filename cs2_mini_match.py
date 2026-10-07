@@ -120,27 +120,22 @@ def select_arm(sel_arm , prot_pri):
             sel_arm = input("❓Select a protection item: ")
 
         else:
-            player["armor"] = sel_arm
             break
     return sel_arm
 
 def price_arm(player , prot_pri , sel_arm):
     while True:
 
-        if sel_arm in prot_pri and player["money"] < prot_pri[sel_arm]:
+        if  player["money"] < prot_pri[sel_arm]:
             print("💢your money is not enough for this round!😄")
             break
-
-        elif player["money"] < prot_pri[sel_arm]:
-            print("❌your money isn't enough❌")
-            sel_arm = input("Select a protection item: ").lower()
-            sel_arm = select_arm(sel_arm , prot_pri)
 
         else:
             player["money"] -= prot_pri[sel_arm]
             print("✅ "+ sel_arm + " has been selected! 🛡🧥")
+            player["armor"] = sel_arm
             break
-    return sel_arm
+        
 
 #______________________________________________________________________________________
 
