@@ -49,7 +49,7 @@ weapon_dam = {
 TEAM_1 = 0
 TEAM_2 = 0
 
-
+#_________________________________________________________________________________
 def buy_menu():
     print("=============Buy Menu=============")
     for weapon, price , dam in zip(weapon_pri, weapon_pri.values() , weapon_dam.values() ) :
@@ -59,7 +59,7 @@ def buy_menu():
 
     print("==================================")
     print("👉💵your money: " + str(player["money"]) + "💵")
-        
+#_________________________________________________________________________________        
 def select_team(player):
     while True:
         if player["Team"] not in ["ct" , "t"]:
@@ -68,6 +68,7 @@ def select_team(player):
         else:
             print("you are " + player["Team"].upper())
             break
+#__________________________________________________________________________________
 def select_gun(sel_gun, weapon_pri):
     while True:
         if sel_gun not in weapon_pri:
@@ -77,16 +78,6 @@ def select_gun(sel_gun, weapon_pri):
             player["gun"] = sel_gun
             break
     return sel_gun
-
-def select_arm(sel_arm , prot_pri):
-    while True:
-        if sel_arm not in prot_pri:
-            print("your enter is invalid!")
-            sel_arm = input("❓Select a protection item: ")
-        else:
-            player["armor"] = sel_arm
-            break
-    return sel_arm
 
 def select_gun_dam(sel_gun):
     dam = weapon_dam[sel_gun]
@@ -103,19 +94,55 @@ def price_gun(player, weapon_pri, sel_gun):
             print("✅ "+ sel_gun + " has been selected!💥")
             break
     return sel_gun
+#___________________________________________________________________________________
+
+def accept_arm():
+    acc = input("❓do you want to buy an armor(y/n): ").lower()
+    while True:
+        if acc not in ["y" , "n"]:
+            print("your enter is invalid!")
+            acc = input("❓do you want to buy an armor(y/n): ")
+        
+        elif acc == "y":
+            sel_arm = input("select a protection item: ").lower()
+            sel_arm = select_arm(sel_arm , prot_pri)
+            sel_arm = price_arm(player , prot_pri , sel_arm)
+            break
+
+        elif acc == "n":
+            print("ok 👍, let's to play!")
+            break
+
+def select_arm(sel_arm , prot_pri):
+    while True:
+        if sel_arm not in prot_pri:
+            print("your enter is invalid!")
+            sel_arm = input("❓Select a protection item: ")
+
+        else:
+            player["armor"] = sel_arm
+            break
+    return sel_arm
 
 def price_arm(player , prot_pri , sel_arm):
     while True:
-        if player["money"] < prot_pri[sel_arm]:
+
+        if sel_arm in prot_pri and player["money"] < prot_pri[sel_arm]:
+            print("💢your money is not enough for this round!😄")
+            break
+
+        elif player["money"] < prot_pri[sel_arm]:
             print("❌your money isn't enough❌")
             sel_arm = input("Select a protection item: ").lower()
             sel_arm = select_arm(sel_arm , prot_pri)
+
         else:
             player["money"] -= prot_pri[sel_arm]
             print("✅ "+ sel_arm + " has been selected! 🛡🧥")
             break
     return sel_arm
 
+#______________________________________________________________________________________
 
 def won_round(player):
     print("+300$ for kill")
@@ -139,7 +166,31 @@ def info(player):
     print("your headshot: " + str(player["hs"]))
     print("your death: " + str(player["death"]))
     print("your hp: " + str(int(player["hp"])))
-    
+
+#_______________________________________________________________________________
+
+def items_anoth_round(player):
+
+    print("👉💵your money: " + str(player["money"]) + "💵")
+    t = input("Do you want to buy a gun (y/n): ")
+    while True:
+        if t not in ["y" , "n"]:
+            print("your answer is wrong")
+            t = input("❓Do you want to buy a gun (y/n): ") 
+
+        elif t == "y":
+            buy_menu()
+            sel_gun = input("❓Select a gun for play : ").lower()
+            sel_gun = select_gun(sel_gun, weapon_pri)
+            sel_gun = price_gun(player, weapon_pri, sel_gun)
+            break
+
+        else:
+            print("your gun: " + player["gun"])
+            break
+
+    accept_arm()
+
 def start_round():
     for round_num in range(1, 14):
         if player["hp"] <= 0:
@@ -166,23 +217,7 @@ def start_round():
         print("==========Round" + str(round_num) + "==========")
 
         if round_num > 1:
-            print("👉💵your money: " + str(player["money"]) + "💵")
-            t = input("Do you want to buy a gun (y/n): ")
-            while True:
-                if t not in ["y" , "n"]:
-                    print("your answer is wrong")
-                    t = input("Do you want to buy a gun (y/n): ") 
-
-                elif t == "y":
-                    buy_menu()
-                    sel_gun = input("❓Select a gun for play : ").lower()
-                    sel_gun = select_gun(sel_gun, weapon_pri)
-                    sel_gun = price_gun(player, weapon_pri, sel_gun)
-                    break
-
-                else:
-                    print("your gun: " + player["gun"])
-                    break
+            items_anoth_round(player)
                 
         print("1.kill\n2.headshot\n3.death\n4.nothing")
         s = str(input("Select a chois: "))
@@ -210,6 +245,8 @@ def start_round():
         else:
             print("nothing work in this round")
         
+#__________________________________________________________________________
+
 
 select_team(player)
 buy_menu()
@@ -217,8 +254,7 @@ sel_gun = input("❓Select a gun for play : ").lower()
 sel_gun = select_gun(sel_gun, weapon_pri)
 sel_gun = price_gun(player, weapon_pri, sel_gun)
 player["gun_dam"] = select_gun_dam(sel_gun)
-sel_arm = input("select a protection item: ").lower()
-sel_arm = select_arm(sel_arm , prot_pri)
-sel_arm = price_arm(player , sel_arm , prot_pri)
+
+accept_arm()
 
 start_round()
