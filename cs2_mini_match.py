@@ -152,7 +152,7 @@ def lose_round(player):
     print("+1450$ for loss")
     player["money"] += 1350
     player["death"] += 1
-    player["hp"] -= (100 / 5)
+    player["hp"] -= 20
 
 
 def info(player):
@@ -188,23 +188,6 @@ def items_anoth_round(player):
 
 def start_round():
     for round_num in range(1, 14):
-        if player["hp"] <= 0:
-            print("☠you are dead☠")
-            print("THE FINAL RESULT is:")
-            info(player)
-            if player["kill"] <= 3:
-                print("you are very weak in this game😒\nback to school🖐")
-                break
-
-            elif 4 <= player["kill"] <= 7:
-                print("you are midlevel in this game👌\nwell played🖐")
-                break
-            elif 8 <= player["kill"] <= 10:
-                print("you can train and reach the pro in this game\n🙌nice played🖐")
-                break
-            elif 11 <= player["kill"] <= 13:
-                print("WOW! you are pro in this game\n⭐very good and nice play👍\n⭐good luck✋ ")
-                break
         
         if player["hp"] <= 25:
             print("❗LOW HP💢")
@@ -236,6 +219,26 @@ def start_round():
         elif s == "3":
             lose_round(player)
             info(player)
+            if player["hp"] <= 0:
+                print("☠you are dead☠")
+                print("THE FINAL RESULT is:")
+                info(player)
+                if player["kill"] <= 3:
+                    print("you are very weak in this game😒\nback to school🖐")
+                    break
+
+                elif 4 <= player["kill"] <= 7:
+                    print("you are midlevel in this game👌\nwell played🖐")
+                    break
+
+                elif 8 <= player["kill"] <= 10:
+                    print("you can train and reach the pro in this game\n🙌nice played🖐")
+                    break
+
+                elif 11 <= player["kill"] <= 13:
+                    print("WOW! you are pro in this game\n⭐very good and nice play👍\n⭐good luck✋ ")
+                    break 
+            
 
         else:
             print("nothing work in this round")
